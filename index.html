@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>STUN/TURN Server - Verificador de Conectividad</title>
+
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+      crossorigin="anonymous"
+    />
+
+    <link rel="stylesheet" href="https://parsleyjs.org/src/parsley.css" />
+  </head>
+  <body>
+    <div class="container m-4">
+      <div class="d-flex justify-content-center">
+        <div class="card" style="width: 30rem;">
+          <div class="card-body">
+            <h5 class="card-title">Ingreso de datos</h5>
+            <form id="form" method="POST" data-parsley-validate novalidate>
+              <div class="form-group row">
+                <div class="col-12 form-row">
+                  <div class="col-8">
+                    <label class="col-form-label text-sm-left"
+                      >URL o IP del servidor<span class="text-danger"
+                        >*</span
+                      ></label
+                    >
+                    <input
+                      type="text"
+                      required
+                      name="host"
+                      placeholder="URL o IP del servidor"
+                      class="form-control"
+                      data-parsley-trigger="change"
+                      autocomplete="off"
+                      autofocus
+                    />
+                  </div>
+                  <div class="col-4">
+                    <label class="col-form-label text-sm-left"
+                      >Puerto<span class="text-danger">*</span></label
+                    >
+                    <input
+                      type="number"
+                      min="1024"
+                      value="3478"
+                      max="65535"
+                      required
+                      name="puerto"
+                      placeholder="Puerto"
+                      class="form-control"
+                      data-parsley-trigger="change"
+                      autocomplete="off"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-12 col-form-label text-sm-left"
+                  >Tipo de Servidor<span class="text-danger">*</span></label
+                >
+                <div class="col-12">
+                  <div class="form-check form-check-inline">
+                    <input
+                      id="inlineRadio1"
+                      class="form-check-input"
+                      type="radio"
+                      name="tipo_servidor"
+                      value="stun"
+                      checked
+                      required
+                    />
+                    <label class="form-check-label" for="inlineRadio1"
+                      >STUN</label
+                    >
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input
+                      id="inlineRadio2"
+                      class="form-check-input"
+                      type="radio"
+                      name="tipo_servidor"
+                      value="turn"
+                      required
+                    />
+                    <label class="form-check-label" for="inlineRadio2"
+                      >TURN</label
+                    >
+                  </div>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-12 col-form-label text-sm-left"
+                  >Protocolo de Transporte<span class="text-danger"
+                    >*</span
+                  ></label
+                >
+                <div class="col-12">
+                  <div class="form-check form-check-inline">
+                    <input
+                      id="inlineRadio3"
+                      class="form-check-input"
+                      type="radio"
+                      name="protocolo"
+                      value="tcp"
+                      checked
+                      required
+                    />
+                    <label class="form-check-label" for="inlineRadio3"
+                      >TCP</label
+                    >
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input
+                      id="inlineRadio4"
+                      class="form-check-input"
+                      type="radio"
+                      name="protocolo"
+                      value="udp"
+                      required
+                    />
+                    <label class="form-check-label" for="inlineRadio4"
+                      >UDP</label
+                    >
+                  </div>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-12 col-form-label text-sm-left"
+                  >Credenciales
+                  <small class="text-muted"
+                    >(Solo si es necesario)</small
+                  ></label
+                >
+                <div class="col-12 form-row">
+                  <div class="col">
+                    <input
+                      type="text"
+                      class="form-control"
+                      name="usuario"
+                      placeholder="Nombre de usuario"
+                      autocomplete="off"
+                    />
+                    <small class="form-text text-muted"
+                      >Nombre de usuario.</small
+                    >
+                  </div>
+                  <div class="col">
+                    <input
+                      type="text"
+                      class="form-control"
+                      name="password"
+                      placeholder="Contraseña"
+                      autocomplete="off"
+                    />
+                    <small class="form-text text-muted">Contraseña.</small>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-12 col-form-label text-sm-left"
+                  >Tiempo de espera de respuesta</label
+                >
+                <div class="col-12">
+                  <input
+                    min="0"
+                    step="1000"
+                    value="5000"
+                    type="number"
+                    required
+                    name="timeout"
+                    placeholder="Tiempo de espera de respuesta"
+                    class="form-control"
+                    data-parsley-trigger="change"
+                    autocomplete="off"
+                    data-parsley-trigger="change"
+                  />
+                  <small class="form-text text-muted"
+                    >Por defecto es de 5000 milisegundos.</small
+                  >
+                </div>
+              </div>
+              <div id="success"></div>
+              <div class="form-group row text-right">
+                <div class="col-12">
+                  <button
+                    id="btnSubmit"
+                    type="submit"
+                    class="btn btn-primary btn-lg btn-block"
+                  >
+                    Realizar Test
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+      integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+      crossorigin="anonymous"
+    ></script>
+
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+      integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+      crossorigin="anonymous"
+    ></script>
+
+    <script src="js/Parsley/parsley.min.js"></script>
+    <script src="js/Parsley/i18n/es.js"></script>
+
+    <script src="js/script.js"></script>
+  </body>
+</html>
