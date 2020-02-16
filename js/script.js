@@ -12,7 +12,7 @@ function checkTurnOrStun(turnConfig, timeout) {
       promiseResolved = true;
     }, timeout || 5000);
 
-    var promiseResolved = false,
+    let promiseResolved = false,
       myPeerConnection =
         window.RTCPeerConnection ||
         window.mozRTCPeerConnection ||
@@ -56,8 +56,8 @@ $(document).ready(function() {
     .parsley()
     .on("form:success", function(e) {
       $("#form #btnSubmit").prop("disabled", true);
-      var info = {};
-      for (var i = 0; i < e.fields.length; i++) {
+      let info = {};
+      for (let i = 0; i < e.fields.length; i++) {
         info[e.fields[i].element.name] =
           e.fields[i].element.name == "timeout"
             ? Number(e.fields[i].value)
