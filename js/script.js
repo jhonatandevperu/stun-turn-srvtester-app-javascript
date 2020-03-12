@@ -1,115 +1,99 @@
 "use strict";
 
-//Autor's URL of JS function: https://stackoverflow.com/a/57003981
-function checkTurnOrStun(turnConfig, timeout) {
-  return new Promise(function(resolve, reject) {
-    setTimeout(function() {
-      if (promiseResolved) {
-        if (promiseResolved == "STUN") resolve("STUN");
-        return;
-      }
+//Autor's URL of checkTurnOrStun function: https://stackoverflow.com/a/34033938
+const checkTurnOrStun = (turnConfig, timeout) => {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      if (promiseResolved) return;
       resolve(false);
       promiseResolved = true;
     }, timeout || 5000);
 
-    let promiseResolved = false,
+    var promiseResolved = false,
       myPeerConnection =
         window.RTCPeerConnection ||
         window.mozRTCPeerConnection ||
         window.webkitRTCPeerConnection, //compatibility for firefox and chrome
       pc = new myPeerConnection({ iceServers: [turnConfig] }),
-      noop = function() {};
+      noop = () => {};
     pc.createDataChannel(""); //create a bogus data channel
-    pc.createOffer(function(sdp) {
+    pc.createOffer(sdp => {
       if (sdp.sdp.indexOf("typ relay") > -1) {
         // sometimes sdp contains the ice candidates...
-        promiseResolved = "TURN";
+        promiseResolved = true;
         resolve(true);
       }
       pc.setLocalDescription(sdp, noop, noop);
     }, noop); // create offer and set local description
-    pc.onicecandidate = function(ice) {
+    pc.onicecandidate = ice => {
       //listen for candidate events
-      if (!ice || !ice.candidate || !ice.candidate.candidate) return;
-      if (ice.candidate.candidate.indexOf("typ relay") != -1) {
-        promiseResolved = "TURN";
-        resolve("TURN");
-      } else if (
-        !promiseResolved &&
-        (ice.candidate.candidate.indexOf("typ prflx") != -1 ||
-          ice.candidate.candidate.indexOf("typ srflx") != -1)
-      ) {
-        promiseResolved = "STUN";
-        if (turnConfig.url.indexOf("turn:") !== 0) resolve("STUN");
-      } else return;
+      if (
+        promiseResolved ||
+        !ice ||
+        !ice.candidate ||
+        !ice.candidate.candidate ||
+        !(ice.candidate.candidate.indexOf("typ relay") > -1)
+      )
+        return;
+      promiseResolved = true;
+      resolve(true);
     };
   });
-}
+};
 
-$(document).ready(function() {
-  $("#form").submit(function(e) {
+document.addEventListener("DOMContentLoaded", () => {
+  const form = document.getElementById("form");
+  form.addEventListener("submit", e => {
     e.preventDefault();
     e.stopPropagation();
   });
 
   $("#form")
     .parsley()
-    .on("form:success", function(e) {
-      $("#form #btnSubmit").prop("disabled", true);
-      let info = {};
+    .on("form:success", async e => {
+      form.querySelector("#btnSubmit").disabled = true;
+      const info = {};
       for (let i = 0; i < e.fields.length; i++) {
         info[e.fields[i].element.name] =
           e.fields[i].element.name == "timeout"
             ? Number(e.fields[i].value)
             : e.fields[i].value;
       }
-
-      checkTurnOrStun(
-        info.usuario != "" && info.password != ""
-          ? {
-              url: `${info.tipo_servidor}:${info.host}:${info.puerto}?transport=${info.protocolo}`,
-              credential: info.password,
-              username: info.usuario
-            }
-          : {
-              url: `${info.tipo_servidor}:${info.host}:${info.puerto}?transport=${info.protocolo}`
-            },
-        info.timeout
-      )
-        .then(function(resultado) {
-          if (resultado) {
-            $("#success").html("<div class='alert alert-success'>");
-            $("#success > .alert-success")
-              .html(
-                "<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;"
-              )
-              .append("</button>");
-            $("#success > .alert-success").append(
-              `<strong>El servidor ${resultado}, se encuentra activo!</strong>`
-            );
-            $("#success > .alert-success").append("</div>");
-          } else {
-            $("#success").html("<div class='alert alert-danger'>");
-            $("#success > .alert-danger")
-              .html(
-                "<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;"
-              )
-              .append("</button>");
-            $("#success > .alert-danger").append(
-              $("<strong>").text(`El servidor, NO se encuentra activo.`)
-            );
-            $("#success > .alert-danger").append("</div>");
-          }
-          $("#form").trigger("reset");
-          $("#form")
-            .parsley()
-            .reset();
-          setTimeout(function() {
-            $("#form #btnSubmit").prop("disabled", false);
-          }, 1000);
-        })
-        .catch(function(error) {
-          console.error(error);
-        });
+      try {
+        let success = await checkTurnOrStun(
+          String(info.usuario).trim().length > 0 &&
+            String(info.password).trim().length > 0
+            ? {
+                urls: `${info.tipo_servidor}:${info.host}:${info.puerto}?transport=${info.protocolo}`,
+                username: info.usuario,
+                credential: info.password
+              }
+            : {
+                url: `${info.tipo_servidor}:${info.host}:${info.puerto}?transport=${info.protocolo}`
+              },
+          info.timeout
+        );
+        if (success) {
+          const divSuccess = document.createElement("div");
+          divSuccess.className = "alert alert-success";
+          divSuccess.innerHTML = `<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;  </button><strong>El servidor ${success}, se encuentra activo!</strong>`;
+          form.querySelector("#success").appendChild(divSuccess);
+        } else {
+          const divError = document.createElement("div");
+          divError.className = "alert alert-danger";
+          divError.innerHTML = `<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button> <strong>El servidor, NO se encuentra activo.</strong>`;
+          form.querySelector("#success").appendChild(divError);
+        }
+      } catch (error) {
+        console.error();
+      } finally {
+        form.reset();
+        $("#form")
+          .parsley()
+          .reset();
+        setTimeout(() => {
+          form.querySelector("#btnSubmit").disabled = false;
+        }, 1000);
+      }
     });
 });
