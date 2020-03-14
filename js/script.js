@@ -76,12 +76,16 @@ document.addEventListener("DOMContentLoaded", () => {
         if (success) {
           const divSuccess = document.createElement("div");
           divSuccess.className = "alert alert-success";
-          divSuccess.innerHTML = `<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;  </button><strong>El servidor ${success}, se encuentra activo!</strong>`;
+          divSuccess.innerHTML = `<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;  </button><strong>El servidor ${String(
+            info.tipo_servidor
+          ).toUpperCase()}, se encuentra activo!</strong>`;
           form.querySelector("#success").appendChild(divSuccess);
         } else {
           const divError = document.createElement("div");
           divError.className = "alert alert-danger";
-          divError.innerHTML = `<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button> <strong>El servidor, NO se encuentra activo.</strong>`;
+          divError.innerHTML = `<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button> <strong>El servidor ${String(
+            info.tipo_servidor
+          ).toUpperCase()}, NO se encuentra activo.</strong>`;
           form.querySelector("#success").appendChild(divError);
         }
       } catch (error) {

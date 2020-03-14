@@ -72,7 +72,7 @@
                       type="radio"
                       name="tipo_servidor"
                       value="stun"
-                      checked
+                      disabled
                       required
                     />
                     <label class="form-check-label" for="inlineRadio1"
@@ -86,6 +86,7 @@
                       type="radio"
                       name="tipo_servidor"
                       value="turn"
+                      checked
                       required
                     />
                     <label class="form-check-label" for="inlineRadio2"
@@ -170,7 +171,7 @@
                   <input
                     min="0"
                     step="1000"
-                    value="5000"
+                    value="2000"
                     type="number"
                     required
                     name="timeout"
@@ -181,7 +182,7 @@
                     data-parsley-trigger="change"
                   />
                   <small class="form-text text-muted"
-                    >Por defecto es de 5000 milisegundos.</small
+                    >Por defecto es de 2000 milisegundos.</small
                   >
                 </div>
               </div>
