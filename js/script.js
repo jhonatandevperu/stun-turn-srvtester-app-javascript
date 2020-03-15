@@ -89,7 +89,11 @@ document.addEventListener("DOMContentLoaded", () => {
           form.querySelector("#success").appendChild(divError);
         }
       } catch (error) {
-        console.error();
+        console.error(error);
+        const divError = document.createElement("div");
+        divError.className = "alert alert-danger";
+        divError.innerHTML = `<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button> <strong>Al fue mal. Error: ${error} </strong>`;
+        form.querySelector("#success").appendChild(divError);
       } finally {
         form.reset();
         $("#form")

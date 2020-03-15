@@ -16,189 +16,194 @@
     <link rel="stylesheet" href="https://parsleyjs.org/src/parsley.css" />
   </head>
   <body>
-    <div class="container mt-4 mb-4">
-      <div class="d-flex justify-content-center">
-        <div class="card" style="width: 50rem;">
-          <div class="card-body">
-            <h5 class="card-title">Ingreso de datos</h5>
-            <form id="form" method="POST" data-parsley-validate novalidate>
-              <div class="form-group row">
-                <div class="col-12 form-row">
-                  <div class="col-8">
-                    <label class="col-form-label text-sm-left"
-                      >URL o IP del servidor<span class="text-danger"
-                        >*</span
-                      ></label
-                    >
-                    <input
-                      type="text"
-                      required
-                      name="host"
-                      placeholder="URL o IP del servidor"
-                      class="form-control"
-                      data-parsley-trigger="change"
-                      autocomplete="off"
-                      autofocus
-                    />
+    <div class="container mt-2 mb-2 d-flex justify-content-center">
+      <div class="row">
+        <div class="col-sm">
+          <h4 class="text-center">
+            STUN/TURN Server - Verificador de Conectividad
+          </h4>
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Ingreso de datos</h5>
+              <form id="form" method="POST" data-parsley-validate novalidate>
+                <div class="form-group row">
+                  <div class="col-12 form-row">
+                    <div class="col-8">
+                      <label class="col-form-label text-sm-left"
+                        >URL o IP del servidor<span class="text-danger"
+                          >*</span
+                        ></label
+                      >
+                      <input
+                        type="text"
+                        required
+                        name="host"
+                        placeholder="URL o IP del servidor"
+                        class="form-control"
+                        data-parsley-trigger="change"
+                        autocomplete="off"
+                        autofocus
+                      />
+                    </div>
+                    <div class="col-4">
+                      <label class="col-form-label text-sm-left"
+                        >Puerto<span class="text-danger">*</span></label
+                      >
+                      <input
+                        type="number"
+                        min="1024"
+                        value="3478"
+                        max="65535"
+                        required
+                        name="puerto"
+                        placeholder="Puerto"
+                        class="form-control"
+                        data-parsley-trigger="change"
+                        autocomplete="off"
+                      />
+                    </div>
                   </div>
-                  <div class="col-4">
-                    <label class="col-form-label text-sm-left"
-                      >Puerto<span class="text-danger">*</span></label
-                    >
+                </div>
+                <div class="form-group row">
+                  <label class="col-12 col-form-label text-sm-left"
+                    >Tipo de Servidor<span class="text-danger">*</span></label
+                  >
+                  <div class="col-12">
+                    <div class="form-check form-check-inline">
+                      <input
+                        id="inlineRadio1"
+                        class="form-check-input"
+                        type="radio"
+                        name="tipo_servidor"
+                        value="stun"
+                        disabled
+                        required
+                      />
+                      <label class="form-check-label" for="inlineRadio1"
+                        >STUN</label
+                      >
+                    </div>
+                    <div class="form-check form-check-inline">
+                      <input
+                        id="inlineRadio2"
+                        class="form-check-input"
+                        type="radio"
+                        name="tipo_servidor"
+                        value="turn"
+                        checked
+                        required
+                      />
+                      <label class="form-check-label" for="inlineRadio2"
+                        >TURN</label
+                      >
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-12 col-form-label text-sm-left"
+                    >Protocolo de Transporte<span class="text-danger"
+                      >*</span
+                    ></label
+                  >
+                  <div class="col-12">
+                    <div class="form-check form-check-inline">
+                      <input
+                        id="inlineRadio3"
+                        class="form-check-input"
+                        type="radio"
+                        name="protocolo"
+                        value="tcp"
+                        checked
+                        required
+                      />
+                      <label class="form-check-label" for="inlineRadio3"
+                        >TCP</label
+                      >
+                    </div>
+                    <div class="form-check form-check-inline">
+                      <input
+                        id="inlineRadio4"
+                        class="form-check-input"
+                        type="radio"
+                        name="protocolo"
+                        value="udp"
+                        required
+                      />
+                      <label class="form-check-label" for="inlineRadio4"
+                        >UDP</label
+                      >
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-12 col-form-label text-sm-left"
+                    >Credenciales
+                    <small class="text-muted"
+                      >(Solo si es necesario)</small
+                    ></label
+                  >
+                  <div class="col-12 form-row">
+                    <div class="col">
+                      <input
+                        type="text"
+                        class="form-control"
+                        name="usuario"
+                        placeholder="Nombre de usuario"
+                        autocomplete="off"
+                      />
+                      <small class="form-text text-muted"
+                        >Nombre de usuario.</small
+                      >
+                    </div>
+                    <div class="col">
+                      <input
+                        type="text"
+                        class="form-control"
+                        name="password"
+                        placeholder="Contraseña"
+                        autocomplete="off"
+                      />
+                      <small class="form-text text-muted">Contraseña.</small>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-12 col-form-label text-sm-left"
+                    >Tiempo de espera de respuesta</label
+                  >
+                  <div class="col-12">
                     <input
+                      min="0"
+                      step="1000"
+                      value="2000"
                       type="number"
-                      min="1024"
-                      value="3478"
-                      max="65535"
                       required
-                      name="puerto"
-                      placeholder="Puerto"
+                      name="timeout"
+                      placeholder="Tiempo de espera de respuesta"
                       class="form-control"
                       data-parsley-trigger="change"
                       autocomplete="off"
-                    />
-                  </div>
-                </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-12 col-form-label text-sm-left"
-                  >Tipo de Servidor<span class="text-danger">*</span></label
-                >
-                <div class="col-12">
-                  <div class="form-check form-check-inline">
-                    <input
-                      id="inlineRadio1"
-                      class="form-check-input"
-                      type="radio"
-                      name="tipo_servidor"
-                      value="stun"
-                      disabled
-                      required
-                    />
-                    <label class="form-check-label" for="inlineRadio1"
-                      >STUN</label
-                    >
-                  </div>
-                  <div class="form-check form-check-inline">
-                    <input
-                      id="inlineRadio2"
-                      class="form-check-input"
-                      type="radio"
-                      name="tipo_servidor"
-                      value="turn"
-                      checked
-                      required
-                    />
-                    <label class="form-check-label" for="inlineRadio2"
-                      >TURN</label
-                    >
-                  </div>
-                </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-12 col-form-label text-sm-left"
-                  >Protocolo de Transporte<span class="text-danger"
-                    >*</span
-                  ></label
-                >
-                <div class="col-12">
-                  <div class="form-check form-check-inline">
-                    <input
-                      id="inlineRadio3"
-                      class="form-check-input"
-                      type="radio"
-                      name="protocolo"
-                      value="tcp"
-                      checked
-                      required
-                    />
-                    <label class="form-check-label" for="inlineRadio3"
-                      >TCP</label
-                    >
-                  </div>
-                  <div class="form-check form-check-inline">
-                    <input
-                      id="inlineRadio4"
-                      class="form-check-input"
-                      type="radio"
-                      name="protocolo"
-                      value="udp"
-                      required
-                    />
-                    <label class="form-check-label" for="inlineRadio4"
-                      >UDP</label
-                    >
-                  </div>
-                </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-12 col-form-label text-sm-left"
-                  >Credenciales
-                  <small class="text-muted"
-                    >(Solo si es necesario)</small
-                  ></label
-                >
-                <div class="col-12 form-row">
-                  <div class="col">
-                    <input
-                      type="text"
-                      class="form-control"
-                      name="usuario"
-                      placeholder="Nombre de usuario"
-                      autocomplete="off"
+                      data-parsley-trigger="change"
                     />
                     <small class="form-text text-muted"
-                      >Nombre de usuario.</small
+                      >Por defecto es de 2000 milisegundos.</small
                     >
                   </div>
-                  <div class="col">
-                    <input
-                      type="text"
-                      class="form-control"
-                      name="password"
-                      placeholder="Contraseña"
-                      autocomplete="off"
-                    />
-                    <small class="form-text text-muted">Contraseña.</small>
+                </div>
+                <div id="success"></div>
+                <div class="form-group row text-right">
+                  <div class="col-12">
+                    <button
+                      id="btnSubmit"
+                      type="submit"
+                      class="btn btn-primary btn-lg btn-block"
+                    >
+                      Realizar Test
+                    </button>
                   </div>
                 </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-12 col-form-label text-sm-left"
-                  >Tiempo de espera de respuesta</label
-                >
-                <div class="col-12">
-                  <input
-                    min="0"
-                    step="1000"
-                    value="2000"
-                    type="number"
-                    required
-                    name="timeout"
-                    placeholder="Tiempo de espera de respuesta"
-                    class="form-control"
-                    data-parsley-trigger="change"
-                    autocomplete="off"
-                    data-parsley-trigger="change"
-                  />
-                  <small class="form-text text-muted"
-                    >Por defecto es de 2000 milisegundos.</small
-                  >
-                </div>
-              </div>
-              <div id="success"></div>
-              <div class="form-group row text-right">
-                <div class="col-12">
-                  <button
-                    id="btnSubmit"
-                    type="submit"
-                    class="btn btn-primary btn-lg btn-block"
-                  >
-                    Realizar Test
-                  </button>
-                </div>
-              </div>
-            </form>
+              </form>
+            </div>
           </div>
         </div>
       </div>
