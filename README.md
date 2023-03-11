@@ -16,4 +16,4 @@ Está disponible en navegadores web nativos modernos y plataformas móviles como
 
 ## Probar Verificador de Conectividad
 
-[Clic aquí, para ir al enlace.](https://jhonatan-dev.github.io/stun-turn-server-tester/)
+[Clic aquí, para ir al enlace.](https://jhonatandevperu.github.io/stun-turn-srvtester-app-javascript/)
